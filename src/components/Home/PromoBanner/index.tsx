@@ -17,7 +17,9 @@ const PromoBanner = () => {
             </h2>
 
             <p>
-              Celebrate life's most precious moments with our exquisite diamond solitaire rings. Each piece features conflict-free diamonds, expertly cut and set in premium metals.
+              {
+                "Celebrate life's most precious moments with our exquisite diamond solitaire rings. Each piece features conflict-free diamonds, expertly cut and set in premium metals."
+              }
             </p>
 
             <a
@@ -90,7 +92,8 @@ const PromoBanner = () => {
               </h2>
 
               <p className="max-w-[285px] text-custom-sm">
-                Stunning emerald gemstones surrounded by brilliant diamonds, handcrafted to perfection in 18K gold settings.
+                Stunning emerald gemstones surrounded by brilliant diamonds,
+                handcrafted to perfection in 18K gold settings.
               </p>
 
               <a
