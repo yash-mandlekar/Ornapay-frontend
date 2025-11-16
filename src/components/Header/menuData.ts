@@ -59,13 +59,13 @@ export const menuData: Menu[] = [
         id: 67,
         title: "Sign in",
         newTab: false,
-        path: "/signin",
+        path: "/auth/signin",
       },
       {
         id: 68,
         title: "Sign up",
         newTab: false,
-        path: "/signup",
+        path: "/auth/signup",
       },
       {
         id: 69,
