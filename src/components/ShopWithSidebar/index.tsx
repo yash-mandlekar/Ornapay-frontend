@@ -32,37 +32,36 @@ const ShopWithSidebar = () => {
 
   const categories = [
     {
-      name: "Desktop",
+      name: "Necklace",
       products: 10,
       isRefined: true,
     },
     {
-      name: "Laptop",
+      name: "Earrings",
       products: 12,
       isRefined: false,
     },
     {
-      name: "Monitor",
+      name: "Ring",
       products: 30,
       isRefined: false,
     },
     {
-      name: "UPS",
+      name: "Bracelet",
       products: 23,
       isRefined: false,
     },
     {
-      name: "Phone",
+      name: "Anklet",
       products: 10,
       isRefined: false,
     },
     {
-      name: "Watch",
+      name: "Pendant",
       products: 13,
       isRefined: false,
     },
   ];
-
   const genders = [
     {
       name: "Men",

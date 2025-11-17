@@ -38,13 +38,13 @@ const Header = () => {
 
   const options = [
     { label: "All Categories", value: "0" },
-    { label: "Desktop", value: "1" },
-    { label: "Laptop", value: "2" },
-    { label: "Monitor", value: "3" },
-    { label: "Phone", value: "4" },
-    { label: "Watch", value: "5" },
-    { label: "Mouse", value: "6" },
-    { label: "Tablet", value: "7" },
+    { label: "Necklace", value: "1" },
+    { label: "Earrings", value: "2" },
+    { label: "Ring", value: "3" },
+    { label: "Bracelet", value: "4" },
+    { label: "Anklet", value: "5" },
+    { label: "Pendant", value: "6" },
+    { label: "Brooch", value: "7" },
   ];
 
   return (
