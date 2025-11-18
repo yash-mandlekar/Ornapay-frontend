@@ -8,55 +8,12 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAppSelector } from "@/redux/store";
 
 const ShopDetails = () => {
-  const [activeColor, setActiveColor] = useState("blue");
   const { openPreviewModal } = usePreviewSlider();
   const [previewImg, setPreviewImg] = useState(0);
-
-  const [storage, setStorage] = useState("gb128");
-  const [type, setType] = useState("active");
-  const [sim, setSim] = useState("dual");
   const [quantity, setQuantity] = useState(1);
 
   const [activeTab, setActiveTab] = useState("tabOne");
 
-  const storages = [
-    {
-      id: "gb128",
-      title: "128 GB",
-    },
-    {
-      id: "gb256",
-      title: "256 GB",
-    },
-    {
-      id: "gb512",
-      title: "521 GB",
-    },
-  ];
-
-  const types = [
-    {
-      id: "active",
-      title: "Active",
-    },
-
-    {
-      id: "inactive",
-      title: "Inactive",
-    },
-  ];
-
-  const sims = [
-    {
-      id: "dual",
-      title: "Dual",
-    },
-
-    {
-      id: "e-sim",
-      title: "E Sim",
-    },
-  ];
 
   const tabs = [
     {
@@ -73,18 +30,29 @@ const ShopDetails = () => {
     },
   ];
 
-  const colors = ["red", "blue", "orange", "pink", "purple"];
-
-  const alreadyExist = localStorage.getItem("productDetails");
   const productFromStorage = useAppSelector(
     (state) => state.productDetailsReducer.value
   );
 
-  const product = alreadyExist ? JSON.parse(alreadyExist) : productFromStorage;
+  // const product = alreadyExist ? JSON.parse(alreadyExist) : productFromStorage;
+  const product = {
+    id: 5,
+    title: "Sapphire Halo Pendant",
+    price: 1299,
+    discountedPrice: 999,
+    reviews: 19,
+    imgs: {
+      previews: [
+        "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=800&h=800&fit=crop",
+        "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=800&h=800&fit=crop",
+      ],
+      thumbnails: [
+        "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=400&h=400&fit=crop",
+      ],
+    },
+  };
 
-  useEffect(() => {
-    localStorage.setItem("productDetails", JSON.stringify(product));
-  }, [product]);
 
   // pass the product here when you get the real data.
   const handlePreviewSlider = () => {
@@ -318,8 +286,7 @@ const ShopDetails = () => {
                   <h3 className="font-medium text-custom-1 mb-4.5">
                     <span className="text-sm sm:text-base text-dark">
                       Price: ₹{product.price}
-                    </span>
-                      {" "}
+                    </span>{" "}
                     <span className="line-through">
                       ₹{product.discountedPrice}{" "}
                     </span>
@@ -372,8 +339,7 @@ const ShopDetails = () => {
                   </ul>
 
                   <form onSubmit={(e) => e.preventDefault()}>
-                    <div className="flex flex-col gap-4.5 border-b border-gray-3 mt-7.5 mb-9 ">
-                    </div>
+                    <div className="flex flex-col gap-4.5 border-b border-gray-3 mt-7.5 mb-9 "></div>
 
                     <div className="flex flex-wrap items-center gap-4.5">
                       <div className="flex items-center rounded-md border border-gray-3">

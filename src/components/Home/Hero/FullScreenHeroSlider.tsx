@@ -154,10 +154,10 @@ const FullScreenHeroSlider = () => {
       <Swiper
         spaceBetween={0}
         centeredSlides={true}
-        // autoplay={{
-        //   delay: 5000,
-        //   disableOnInteraction: false,
-        // }}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
         speed={1500}
         fadeEffect={{
           crossFade: true,
