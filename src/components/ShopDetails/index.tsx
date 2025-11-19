@@ -49,7 +49,7 @@ const ShopDetails = ({ id }: { id: string | string[] }) => {
     };
 
     fetchProduct();
-  }, []);
+  }, [id]);
 
   // Handle variant selection
   const handleVariantSelect = (variant: Variant) => {

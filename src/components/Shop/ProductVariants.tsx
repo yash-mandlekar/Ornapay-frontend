@@ -27,6 +27,10 @@ const ProductVariants: React.FC<ProductVariantsProps> = ({
   onVariantSelect,
   selectedVariant,
 }) => {
+  // Get current selection for each attribute
+  const [selectedAttributes, setSelectedAttributes] = useState<{
+    [key: string]: string;
+  }>({});
   // If no variants, return null
   if (!variants || variants.length === 0) {
     return null;
@@ -46,15 +50,10 @@ const ProductVariants: React.FC<ProductVariantsProps> = ({
 
   const attributeKeys = Object.keys(groupedAttributes);
 
-  // Get current selection for each attribute
-  const [selectedAttributes, setSelectedAttributes] = useState<
-    { [key: string]: string }
-  >({});
-
   // Find matching variant based on selected attributes
-  const findMatchingVariant = (
-    attrs: { [key: string]: string }
-  ): Variant | null => {
+  const findMatchingVariant = (attrs: {
+    [key: string]: string;
+  }): Variant | null => {
     return (
       variants.find((variant) =>
         variant.attributes.every((attr) => attrs[attr.key] === attr.value)
@@ -117,12 +116,10 @@ const ProductVariants: React.FC<ProductVariantsProps> = ({
                       isSelected
                         ? "border-blue bg-blue text-white"
                         : isAvailable
-                          ? "border-gray-3 text-dark hover:border-blue"
-                          : "border-gray-2 text-gray-4 cursor-not-allowed opacity-50"
+                        ? "border-gray-3 text-dark hover:border-blue"
+                        : "border-gray-2 text-gray-4 cursor-not-allowed opacity-50"
                     }`}
-                    title={
-                      !isAvailable ? "Not available in stock" : `${value}`
-                    }
+                    title={!isAvailable ? "Not available in stock" : `${value}`}
                   >
                     {value}
                   </button>

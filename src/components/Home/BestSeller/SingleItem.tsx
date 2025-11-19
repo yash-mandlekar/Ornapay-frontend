@@ -9,10 +9,24 @@ import { addItemToCart } from "@/redux/features/cart/cart-slice";
 import Image from "next/image";
 import Link from "next/link";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import { updateproductDetails } from "@/redux/features/product-details";
 
 const SingleItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const dispatch = useDispatch<AppDispatch>();
+
+  // Get the primary image or first image
+  const getProductImage = () => {
+    if (!item.images || item.images.length === 0) {
+      return "/images/placeholder.png";
+    }
+    
+    const primaryImage = item.images.find(img => img.isPrimary);
+    return primaryImage ? primaryImage.url : item.images[0].url;
+  };
+
+  // Check if product is out of stock
+  const isOutOfStock = item.stock === 0;
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
@@ -21,77 +35,68 @@ const SingleItem = ({ item }: { item: Product }) => {
 
   // add to cart
   const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+    if (isOutOfStock) return;
+    
+    // dispatch(
+    //   addItemToCart({
+    //     ...item,
+    //     quantity: 1,
+    //   })
+    // );
   };
 
   const handleItemToWishList = () => {
-    dispatch(
-      addItemToWishlist({
-        ...item,
-        status: "available",
-        quantity: 1,
-      })
-    );
+    // dispatch(
+    //   addItemToWishlist({
+    //     ...item,
+    //     status: "available",
+    //     quantity: 1,
+    //   })
+    // );
+  };
+
+  const handleProductDetails = () => {
+    dispatch(updateproductDetails({ ...item }));
   };
 
   return (
     <div className="group">
       <div className="relative overflow-hidden rounded-lg bg-[#F6F7FB] min-h-[403px]">
         <div className="text-center px-4 py-7.5">
-          <div className="flex items-center justify-center gap-2.5 mb-2">
-            <div className="flex items-center gap-1">
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-            </div>
+          {/* Removed reviews section as per requirements */}
 
-            <p className="text-custom-sm">({item.reviews})</p>
-          </div>
-
-          <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
+          <h3 
+            className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5"
+            onClick={() => handleProductDetails()}
+          >
             <Link href="/shop-details"> {item.title} </Link>
           </h3>
 
-          <span className="flex items-center justify-center gap-2 font-medium text-lg">
-            <span className="text-dark">₹{item.discountedPrice}</span>
-            <span className="text-dark-4 line-through">₹{item.price}</span>
-          </span>
+          {!isOutOfStock ? (
+            <span className="flex items-center justify-center gap-2 font-medium text-lg">
+              <span className="text-dark">₹{item.discountPrice}</span>
+              <span className="text-dark-4 line-through">₹{item.price}</span>
+            </span>
+          ) : (
+            <span className="text-red-500 font-medium">Out of Stock</span>
+          )}
         </div>
 
-        <div className="flex justify-center items-center">
-          <Image src={item.imgs.previews[0]} alt="" width={280} height={280} />
+        <div className="flex justify-center items-center relative">
+          <Image 
+            src={getProductImage()} 
+            alt={item.title} 
+            width={280} 
+            height={280}
+            className="object-contain"
+          />
+          
+          {/* Out of Stock Badge */}
+          {isOutOfStock && (
+            <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded">
+              Out of Stock
+            </div>
+          )}
         </div>
 
         <div className="absolute right-0 bottom-0 translate-x-full u-w-full flex flex-col gap-2 p-5.5 ease-linear duration-300 group-hover:translate-x-0">
@@ -131,7 +136,12 @@ const SingleItem = ({ item }: { item: Product }) => {
             onClick={() => handleAddToCart()}
             aria-label="button for add to cart"
             id="addCartOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-white hover:bg-blue"
+            disabled={isOutOfStock}
+            className={`flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 ${
+              isOutOfStock
+                ? "text-gray-400 bg-gray-200 cursor-not-allowed"
+                : "text-dark bg-white hover:text-white hover:bg-blue"
+            }`}
           >
             <svg
               className="fill-current"
