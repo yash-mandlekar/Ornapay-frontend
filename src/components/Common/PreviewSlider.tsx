@@ -5,14 +5,26 @@ import "swiper/css/navigation";
 import "swiper/css";
 import Image from "next/image";
 
-import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
-import { useAppSelector } from "@/redux/store";
+// Define types for the component props
+interface ProductImage {
+  url: string;
+  isPrimary?: boolean;
+  _id?: string;
+}
 
-const PreviewSliderModal = () => {
-  const { closePreviewModal, isModalPreviewOpen } = usePreviewSlider();
+interface PreviewSliderModalProps {
+  isModalPreviewOpen: boolean;
+  closePreviewModal: () => void;
+  images: ProductImage[];
+  initialSlide?: number;
+}
 
-  const data = useAppSelector((state) => state.productDetailsReducer.value);
-
+const PreviewSliderModal = ({ 
+  isModalPreviewOpen, 
+  closePreviewModal, 
+  images,
+  initialSlide = 0 
+}: PreviewSliderModalProps) => {
   const sliderRef = useRef(null);
 
   const handlePrev = useCallback(() => {
@@ -25,9 +37,14 @@ const PreviewSliderModal = () => {
     sliderRef.current.swiper.slideNext();
   }, []);
 
+  // Fallback if no images provided
+  const displayImages = images && images.length > 0 
+    ? images 
+    : [{ url: "/images/placeholder.png", isPrimary: true }];
+
   return (
     <div
-      className={`preview-slider w-full h-screen  z-999999 inset-0 flex justify-center items-center bg-[#000000F2] bg-opacity-70 ${
+      className={`preview-slider w-full h-screen z-999999 inset-0 flex justify-center items-center bg-[#000000F2] bg-opacity-70 ${
         isModalPreviewOpen ? "fixed" : "hidden"
       }`}
     >
@@ -55,8 +72,9 @@ const PreviewSliderModal = () => {
 
       <div>
         <button
-          className="rotate-180 absolute left-100 p-5 cursor-pointer z-10 "
+          className="rotate-180 absolute left-100 p-5 cursor-pointer z-10"
           onClick={handlePrev}
+          aria-label="Previous image"
         >
           <svg
             width="36"
@@ -77,6 +95,7 @@ const PreviewSliderModal = () => {
         <button
           className="absolute right-100 p-5 cursor-pointer z-10"
           onClick={handleNext}
+          aria-label="Next image"
         >
           <svg
             width="36"
@@ -95,18 +114,35 @@ const PreviewSliderModal = () => {
         </button>
       </div>
 
-      <Swiper ref={sliderRef} slidesPerView={1} spaceBetween={20}>
-        <SwiperSlide>
-          <div className="flex justify-center items-center">
-            <Image
-              src={"https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop"}
-              alt={"product image"}
-              width={450}
-              height={450}
-            />
-          </div>
-        </SwiperSlide>
+      <Swiper 
+        ref={sliderRef} 
+        slidesPerView={1} 
+        spaceBetween={20}
+        initialSlide={initialSlide}
+        loop={displayImages.length > 1}
+      >
+        {displayImages.map((image, index) => (
+          <SwiperSlide key={image._id || index}>
+            <div className="flex justify-center items-center">
+              <Image
+                src={image.url}
+                alt={`Product image ${index + 1}`}
+                width={450}
+                height={450}
+                className="object-contain"
+              />
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
+
+      {/* Image counter */}
+      {displayImages.length > 1 && (
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-full text-sm z-10">
+          {/* This will be updated dynamically by Swiper if needed */}
+          1 / {displayImages.length}
+        </div>
+      )}
     </div>
   );
 };

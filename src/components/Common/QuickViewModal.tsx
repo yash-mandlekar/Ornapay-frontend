@@ -19,10 +19,7 @@ const QuickViewModal = () => {
 
   // get the product data
   const product = useAppSelector((state) => state.quickViewReducer.value);
-  const [activePreview, setActivePreview] = useState(0);
-
-  console.log(product);
-  console.log(product?.imgs?.previews?.[activePreview]);
+  const [activePreview, setActivePreview] = useState(0)
 
   // preview modal
   const handlePreviewSlider = () => {
@@ -33,12 +30,12 @@ const QuickViewModal = () => {
 
   // add to cart
   const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-      })
-    );
+    // dispatch(
+    //   addItemToCart({
+    //     ...product,
+    //     quantity,
+    //   })
+    // );
 
     closeModal();
   };
