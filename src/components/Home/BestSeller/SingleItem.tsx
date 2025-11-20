@@ -20,8 +20,8 @@ const SingleItem = ({ item }: { item: Product }) => {
     if (!item.images || item.images.length === 0) {
       return "/images/placeholder.png";
     }
-    
-    const primaryImage = item.images.find(img => img.isPrimary);
+
+    const primaryImage = item.images.find((img) => img.isPrimary);
     return primaryImage ? primaryImage.url : item.images[0].url;
   };
 
@@ -36,7 +36,7 @@ const SingleItem = ({ item }: { item: Product }) => {
   // add to cart
   const handleAddToCart = () => {
     if (isOutOfStock) return;
-    
+
     // dispatch(
     //   addItemToCart({
     //     ...item,
@@ -65,11 +65,11 @@ const SingleItem = ({ item }: { item: Product }) => {
         <div className="text-center px-4 py-7.5">
           {/* Removed reviews section as per requirements */}
 
-          <h3 
+          <h3
             className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5"
             onClick={() => handleProductDetails()}
           >
-            <Link href="/shop-details"> {item.title} </Link>
+            <Link href={`/shop/${item._id}`}> {item.title} </Link>
           </h3>
 
           {!isOutOfStock ? (
@@ -83,14 +83,14 @@ const SingleItem = ({ item }: { item: Product }) => {
         </div>
 
         <div className="flex justify-center items-center relative">
-          <Image 
-            src={getProductImage()} 
-            alt={item.title} 
-            width={280} 
+          <Image
+            src={getProductImage()}
+            alt={item.title}
+            width={280}
             height={280}
             className="object-contain"
           />
-          
+
           {/* Out of Stock Badge */}
           {isOutOfStock && (
             <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded">
