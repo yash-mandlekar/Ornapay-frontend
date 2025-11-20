@@ -42,7 +42,7 @@ const CounDown = () => {
                 Discover our exquisite collection of handcrafted jewellery.
               </p>
               <p className="text-sm text-gray-600 mb-8">
-                Limited time offer - don't miss out on these exclusive pieces.
+                Limited time offer - don&apos;t miss out on these exclusive pieces.
               </p>
 
               {/* Countdown timer */}

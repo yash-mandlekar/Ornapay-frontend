@@ -47,7 +47,7 @@ const PromoBanner = () => {
               </p>
 
               <p className="text-sm md:text-base text-gray-700 mb-6 md:mb-8 max-w-md leading-relaxed">
-                Celebrate life's most precious moments with our exquisite
+                Celebrate life&apos;s most precious moments with our exquisite
                 diamond solitaire rings. Each piece features conflict-free
                 diamonds, expertly cut and set in premium metals.
               </p>
