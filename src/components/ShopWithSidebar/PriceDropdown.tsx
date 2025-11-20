@@ -49,7 +49,7 @@ const PriceDropdown = () => {
           <div className="price-range">
             <RangeSlider
               id="range-slider-gradient"
-              className="margin-lg"
+              className="margin-lg text-red"
               step={'any'}
               onInput={(e) =>
                 setSelectedPrice({

@@ -11,13 +11,14 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
+  const { openCartModal } = useCartModalContext();
   const product = { length: 3 };
-
   const handleStickyMenu = () => {
     setStickyMenu(window.scrollY >= 80);
   };
@@ -41,6 +42,10 @@ const Header = () => {
       path: "/contact",
     },
   ];
+
+  const handleOpenCartModal = () => {
+    openCartModal();
+  };
 
   return (
     <header
@@ -100,11 +105,7 @@ const Header = () => {
                   <User size={16} style={{ color: "#832729" }} />
                 </div> */}
                 <div className="text-left hidden lg:block">
-                  <p
-                    className="text-2xs uppercase text-[#832729]"
-                  >
-                    Account
-                  </p>
+                  <p className="text-2xs uppercase text-[#832729]">Account</p>
                   <p className="font-semibold text-xs md:text-sm text-black">
                     Sign In
                   </p>
@@ -117,7 +118,7 @@ const Header = () => {
               </button>
 
               {/* Cart */}
-              <button className="relative flex items-center transition-all hover:opacity-70">
+              <button onClick={handleOpenCartModal} className="relative flex items-center transition-all hover:opacity-70">
                 <div
                   className="w-9 md:w-10 h-9 md:h-10 rounded-full flex items-center justify-center relative flex-shrink-0"
                   style={{ backgroundColor: "#f5f1ed" }}

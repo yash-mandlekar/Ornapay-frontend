@@ -1,5 +1,6 @@
 # Jewellery Store Theme Design System
 # brand name - ornapay
+# icons - lucide-react
 ## Color Palette
 
 ### Primary Colors

@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ChevronUp } from "lucide-react";
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Top: 0 takes us all the way back to the top of the page
-  // Behavior: smooth keeps it smooth!
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -14,7 +13,6 @@ export default function ScrollToTop() {
   };
 
   useEffect(() => {
-    // Button is displayed after scrolling for 500 pixels
     const toggleVisibility = () => {
       if (window.pageYOffset > 300) {
         setIsVisible(true);
@@ -33,17 +31,17 @@ export default function ScrollToTop() {
       {isVisible && (
         <button
           onClick={scrollToTop}
-          className={`items-center justify-center w-10 h-10 rounded-[4px] shadow-lg bg-blue ease-out duration-200 hover:bg-blue-dark fixed bottom-8 right-8 z-999 ${
-            isVisible ? "flex" : "hidden"
-          }`}
+          className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-12 h-12 rounded-lg shadow-2xl transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl group"
+          style={{ 
+            backgroundColor: '#832729',
+            boxShadow: '0 10px 40px rgba(131, 39, 41, 0.3)'
+          }}
+          aria-label="Scroll to top"
         >
-          <svg
-            className="fill-white w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-          >
-            <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z" />
-          </svg>
+          <ChevronUp 
+            className="w-6 h-6 text-white transition-transform duration-300 group-hover:-translate-y-0.5" 
+            strokeWidth={2.5}
+          />
         </button>
       )}
     </>
