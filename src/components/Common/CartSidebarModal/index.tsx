@@ -14,7 +14,7 @@ import { X, ShoppingBag, Eye, CreditCard } from "lucide-react";
 
 const CartSidebarModal = () => {
   const { isCartModalOpen, closeCartModal } = useCartModalContext();
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
+  const cartItems = useAppSelector((state) => state.cart.items);
   const totalPrice = useSelector(selectTotalPrice);
 
   useEffect(() => {

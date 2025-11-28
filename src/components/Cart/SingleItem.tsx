@@ -5,27 +5,58 @@ import {
   removeItemFromCart,
   updateCartItemQuantity,
 } from "@/redux/features/cart/cart-slice";
+import { asyncRemoveFromCart } from "@/redux/features/cart/cart-thunk";
 
 import Image from "next/image";
 
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleRemoveFromCart = () => {
-    dispatch(removeItemFromCart(item.id));
+  const handleRemoveFromCart = async () => {
+    if (isRemoving) return;
+
+    setIsRemoving(true);
+
+    try {
+      // Remove from backend cart - the fulfilled case will update the cart state automatically
+      await dispatch(
+        asyncRemoveFromCart({
+          product: item.productId,
+          variant: item.variant,
+        })
+      ).unwrap();
+
+      // No need to manually dispatch removeItemFromCart here
+      // The asyncRemoveFromCart.fulfilled case in cart-slice.ts already updates state.items
+    } catch (error) {
+      console.error("Failed to remove from cart:", error);
+    } finally {
+      setIsRemoving(false);
+    }
   };
 
   const handleIncreaseQuantity = () => {
     setQuantity(quantity + 1);
-    dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity + 1 }));
+    dispatch(
+      updateCartItemQuantity({
+        productId: item.productId,
+        quantity: quantity + 1,
+      })
+    );
   };
 
   const handleDecreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
-      dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity - 1 }));
+      dispatch(
+        updateCartItemQuantity({
+          productId: item.productId,
+          quantity: quantity - 1,
+        })
+      );
     } else {
       return;
     }
@@ -37,12 +68,17 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-              <Image width={200} height={200} src={item.imgs?.thumbnails[0]} alt="product" />
+              <Image
+                width={200}
+                height={200}
+                src={item.product.images[0]?.url}
+                alt="product"
+              />
             </div>
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-blue">
-                <a href="#"> {item.title} </a>
+                <a href="#"> {item.product.title} </a>
               </h3>
             </div>
           </div>
@@ -50,7 +86,7 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[180px]">
-        <p className="text-dark">${item.discountedPrice}</p>
+        <p className="text-dark">${item.product.discountPrice}</p>
       </div>
 
       <div className="min-w-[275px]">
@@ -106,14 +142,17 @@ const SingleItem = ({ item }) => {
       </div>
 
       <div className="min-w-[200px]">
-        <p className="text-dark">${item.discountedPrice * quantity}</p>
+        <p className="text-dark">${item.product.discountPrice * quantity}</p>
       </div>
 
       <div className="min-w-[50px] flex justify-end">
         <button
           onClick={() => handleRemoveFromCart()}
+          disabled={isRemoving}
           aria-label="button for remove product from cart"
-          className="flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 bg-gray-2 border border-gray-3 text-dark ease-out duration-200 hover:bg-red-light-6 hover:border-red-light-4 hover:text-red"
+          className={`flex items-center justify-center rounded-lg max-w-[38px] w-full h-9.5 bg-gray-2 border border-gray-3 text-dark ease-out duration-200 hover:bg-red-light-6 hover:border-red-light-4 hover:text-red disabled:opacity-50 disabled:cursor-not-allowed ${
+            isRemoving ? "animate-pulse" : ""
+          }`}
         >
           <svg
             className="fill-current"

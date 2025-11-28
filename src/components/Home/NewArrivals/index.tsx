@@ -1,35 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
 import ProductItem from "@/components/Common/ProductItem";
-import shopData from "@/components/Shop/shopData";
-import apiClient from "@/hooks/useAxios";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { clearProductsError } from "@/redux/features/product/product-slice";
+import ProductCard from "@/components/Common/ProductCard";
 
 const NewArrival = () => {
-  const [Products, setProducts] = useState([]);
-  const [Loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const { data } = await apiClient.get(`/api/products`);
-        console.log(data);
-
-        if (data) {
-          setProducts(data.products);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const { products, loading, error } = useAppSelector(
+    (state) => state.products
+  );
 
   return (
     <section className="py-16 md:py-20 lg:py-24 overflow-hidden">
@@ -79,9 +62,9 @@ const NewArrival = () => {
         </div>
 
         {/* Loading skeleton or products grid */}
-        {Loading ? (
+        {products.loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-            {[...Array(4)].map((_, i) => (
+            {[...Array(8)].map((_, i) => (
               <div
                 key={i}
                 className="rounded-2xl p-6 md:p-8 animate-pulse"
@@ -106,12 +89,32 @@ const NewArrival = () => {
               </div>
             ))}
           </div>
+        ) : error ? (
+          <div
+            className="col-span-full py-8 text-center rounded-2xl"
+            style={{
+              backgroundColor: "#ffe5e5",
+              borderColor: "#ff6b6b",
+              borderWidth: "2px",
+            }}
+          >
+            <p className="text-lg font-semibold" style={{ color: "#d32f2f" }}>
+              {error}
+            </p>
+            <button
+              onClick={() => dispatch(clearProductsError())}
+              className="mt-4 px-6 py-2 rounded-lg font-semibold text-white transition-all"
+              style={{ backgroundColor: "#832729" }}
+            >
+              Dismiss
+            </button>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-            {Products && Products.length > 0 ? (
-              Products.map((item, key) => (
-                <ProductItem item={item} key={key} />
-              ))
+            {products && products.list.length > 0 ? (
+              products.list
+                .slice(0, 8)
+                .map((item, key) => <ProductCard item={item} key={key} />)
             ) : (
               <div
                 className="col-span-full py-16 text-center rounded-2xl"

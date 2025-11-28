@@ -11,10 +11,11 @@ import { ReduxProvider } from "@/redux/provider";
 import QuickViewModal from "@/components/Common/QuickViewModal";
 import CartSidebarModal from "@/components/Common/CartSidebarModal";
 import { PreviewSliderProvider } from "../context/PreviewSliderContext";
-import PreviewSliderModal from "@/components/Common/PreviewSlider";
 
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
+import { Toaster } from "sonner";
+import UserIdentifier from "@/components/Auth/UserIdentifier";
 
 export default function RootLayout({
   children,
@@ -22,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState<boolean>(true);
-
+  
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
@@ -35,9 +36,11 @@ export default function RootLayout({
         ) : (
           <>
             <ReduxProvider>
+              <UserIdentifier />
               <CartModalProvider>
                 <ModalProvider>
                   <PreviewSliderProvider>
+                    <Toaster />
                     <Header />
                     {children}
 

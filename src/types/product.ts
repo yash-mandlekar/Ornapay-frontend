@@ -78,10 +78,9 @@ export interface GetProductResponse {
 // API Response for Multiple Products
 export interface GetProductsResponse {
   success: boolean;
-  data: Product[];
+  products: Product[];
   total?: number;
   page?: number;
-  limit?: number;
   message?: string;
 }
 
@@ -114,8 +113,8 @@ export interface ProductFilterParams {
   search?: string;
   category?: string;
   brand?: string;
-  priceMin?: number;
-  priceMax?: number;
+  minPrice?: number;
+  maxPrice?: number;
   inStock?: boolean;
   page?: number;
   limit?: number;

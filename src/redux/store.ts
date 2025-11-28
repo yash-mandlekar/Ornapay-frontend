@@ -1,22 +1,26 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import auth from "./features/auth/auth-slice";
 import quickViewReducer from "./features/quickView-slice";
-import cartReducer from "./features/cart/cart-slice";
+import cart from "./features/cart/cart-slice";
 import wishlistReducer from "./features/wishlist-slice";
-import productDetailsReducer from "./features/product-details";
+import products from "./features/product/product-slice";
 
-import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
+    auth,
     quickViewReducer,
-    cartReducer,
+    cart,
     wishlistReducer,
-    productDetailsReducer,
+    products,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
