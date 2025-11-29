@@ -9,7 +9,6 @@ import { addItemToCart } from "@/redux/features/cart/cart-slice";
 import Image from "next/image";
 import Link from "next/link";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
-import { updateproductDetails } from "@/redux/features/product/product-slice";
 
 const SingleItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -56,7 +55,7 @@ const SingleItem = ({ item }: { item: Product }) => {
   };
 
   const handleProductDetails = () => {
-    dispatch(updateproductDetails({ ...item }));
+    dispatch(updateQuickView({ ...item }));
   };
 
   return (

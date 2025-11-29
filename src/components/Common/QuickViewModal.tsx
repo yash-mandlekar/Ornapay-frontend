@@ -6,7 +6,7 @@ import { addItemToCart } from "@/redux/features/cart/cart-slice";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
-import { updateproductDetails } from "@/redux/features/product/product-slice";
+import { updateQuickView } from "@/redux/features/quickView-slice";
 import { X, ZoomIn, Minus, Plus, Heart, Check } from "lucide-react";
 
 const QuickViewModal = () => {
@@ -36,7 +36,7 @@ const QuickViewModal = () => {
 
   // Preview modal
   const handlePreviewSlider = () => {
-    dispatch(updateproductDetails(product));
+    dispatch(updateQuickView(product));
     openPreviewModal();
   };
 
