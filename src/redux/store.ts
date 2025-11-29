@@ -5,6 +5,7 @@ import quickViewReducer from "./features/quickView-slice";
 import cart from "./features/cart/cart-slice";
 import wishlistReducer from "./features/wishlist-slice";
 import products from "./features/product/product-slice";
+import sections from "./features/sections/sections-slice";
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
@@ -15,6 +16,7 @@ export const store = configureStore({
     cart,
     wishlistReducer,
     products,
+    sections,
   },
 });
 

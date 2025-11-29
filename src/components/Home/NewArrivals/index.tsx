@@ -2,17 +2,31 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
-import ProductItem from "@/components/Common/ProductItem";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { clearProductsError } from "@/redux/features/product/product-slice";
+import { asyncGetSection } from "@/redux/features/sections/sections-thunk";
+import { clearSectionError } from "@/redux/features/sections/sections-slice";
 import ProductCard from "@/components/Common/ProductCard";
+
+const SECTION_SLUG = "new-arrivals";
 
 const NewArrival = () => {
   const dispatch = useAppDispatch();
 
-  const { products, loading, error } = useAppSelector(
-    (state) => state.products
-  );
+  const section = useAppSelector((state) => state.sections[SECTION_SLUG]);
+  const products = section?.products || [];
+  const loading = section?.loading || false;
+  const error = section?.error || null;
+
+  useEffect(() => {
+    if (!section || (products.length === 0 && !loading && !error)) {
+      dispatch(asyncGetSection(SECTION_SLUG));
+    }
+  }, [dispatch, section, products.length, loading, error]);
+
+  // Hide section entirely if it doesn't exist (404 or not found)
+  if (error && (error.includes("404") || error.includes("not found"))) {
+    return null;
+  }
 
   return (
     <section className="py-16 md:py-20 lg:py-24 overflow-hidden">
@@ -41,28 +55,31 @@ const NewArrival = () => {
             </h2>
           </div>
 
-          <Link
-            href="/shop"
-            className="inline-flex items-center gap-2 font-semibold text-base py-3 px-7 rounded-lg transition-all duration-300 hover:scale-105"
-            style={{
-              backgroundColor: "#832729",
-              color: "#FFFFFF",
-              boxShadow: "0 10px 25px rgba(131, 39, 41, 0.2)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = "0.95";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = "1";
-            }}
-          >
-            View All
-            <ArrowRight size={18} />
-          </Link>
+          {/* View All Button - Only show if there are products */}
+          {!loading && !error && products.length > 0 && (
+            <Link
+              href="/shop"
+              className="inline-flex items-center gap-2 font-semibold text-base py-3 px-7 rounded-lg transition-all duration-300 hover:scale-105"
+              style={{
+                backgroundColor: "#832729",
+                color: "#FFFFFF",
+                boxShadow: "0 10px 25px rgba(131, 39, 41, 0.2)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.95";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              View All
+              <ArrowRight size={18} />
+            </Link>
+          )}
         </div>
 
         {/* Loading skeleton or products grid */}
-        {products.loading ? (
+        {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
             {[...Array(8)].map((_, i) => (
               <div
@@ -91,28 +108,39 @@ const NewArrival = () => {
           </div>
         ) : error ? (
           <div
-            className="col-span-full py-8 text-center rounded-2xl"
+            className="col-span-full py-12 text-center rounded-2xl"
             style={{
-              backgroundColor: "#ffe5e5",
-              borderColor: "#ff6b6b",
+              backgroundColor: "#fff8f0",
+              borderColor: "#ffa726",
               borderWidth: "2px",
             }}
           >
-            <p className="text-lg font-semibold" style={{ color: "#d32f2f" }}>
-              {error}
-            </p>
-            <button
-              onClick={() => dispatch(clearProductsError())}
-              className="mt-4 px-6 py-2 rounded-lg font-semibold text-white transition-all"
-              style={{ backgroundColor: "#832729" }}
-            >
-              Dismiss
-            </button>
+            <div className="max-w-md mx-auto">
+              <p
+                className="text-lg font-semibold mb-2"
+                style={{ color: "#e65100" }}
+              >
+                Unable to load New Arrivals
+              </p>
+              <p className="text-sm mb-4" style={{ color: "#666666" }}>
+                {error}
+              </p>
+              <button
+                onClick={() => {
+                  dispatch(clearSectionError(SECTION_SLUG));
+                  dispatch(asyncGetSection(SECTION_SLUG));
+                }}
+                className="px-6 py-2.5 rounded-lg font-semibold text-white transition-all hover:opacity-90"
+                style={{ backgroundColor: "#832729" }}
+              >
+                Try Again
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-            {products && products.list.length > 0 ? (
-              products.list
+            {products && products.length > 0 ? (
+              products
                 .slice(0, 8)
                 .map((item, key) => <ProductCard item={item} key={key} />)
             ) : (

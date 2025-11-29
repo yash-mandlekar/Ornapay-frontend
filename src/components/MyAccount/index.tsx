@@ -7,22 +7,15 @@ import {
   MapPin,
   Settings,
   LogOut,
-  Mail,
-  Phone,
-  Edit2,
   Save,
 } from "lucide-react";
+import { useAppSelector } from "@/redux/store";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-
-  // This should come from Redux - useAppSelector((state) => state.auth)
-  const user = {
-    avatar:
-      "https://res.cloudinary.com/dpchknrfk/image/upload/v1763292491/avatars/k11bppfozqaw90wvhrrg.webp",
-    email: "oabhishekh8@gmail.com",
-    name: "Abhishekh",
-  };
+  const { user, loading } = useAppSelector((state) => state.auth);
+  const { items } = useAppSelector((state) => state.cart);
+  console.log(loading, items);
 
   // This should come from Redux - useAppSelector((state) => state.cart)
   const cartItems = [
@@ -74,6 +67,11 @@ const MyAccount = () => {
         return <DashboardTab user={user} cartItems={cartItems} />;
     }
   };
+
+  // Show skeleton while loading
+  if (loading) {
+    return <AccountSkeleton />;
+  }
 
   return (
     <div
@@ -726,6 +724,143 @@ const AccountDetailsTab = ({ user }) => {
             <Save size={20} />
             Update Password
           </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Skeleton Loading Component
+const AccountSkeleton = () => {
+  return (
+    <div
+      style={{
+        background: "linear-gradient(135deg, #f5f1ed 0%, #ede8e3 100%)",
+        minHeight: "100vh",
+      }}
+    >
+      {/* Breadcrumb Skeleton */}
+      <div
+        style={{
+          backgroundColor: "#f5f1ed",
+          borderBottom: "1px solid #e5d9d0",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div
+            className="h-8 w-48 rounded animate-pulse"
+            style={{ backgroundColor: "#e5d9d0" }}
+          />
+          <div
+            className="h-4 w-32 rounded mt-2 animate-pulse"
+            style={{ backgroundColor: "#e5d9d0" }}
+          />
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar Skeleton */}
+          <div className="lg:w-80 w-full">
+            <div
+              className="bg-white rounded-2xl overflow-hidden"
+              style={{ border: "1px solid #832729" }}
+            >
+              {/* User Profile Skeleton */}
+              <div
+                style={{
+                  backgroundColor: "#f5f1ed",
+                  padding: "2rem",
+                  borderBottom: "1px solid #e5d9d0",
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-16 h-16 rounded-full animate-pulse"
+                    style={{ backgroundColor: "#e5d9d0" }}
+                  />
+                  <div className="flex-1">
+                    <div
+                      className="h-5 w-32 rounded mb-2 animate-pulse"
+                      style={{ backgroundColor: "#e5d9d0" }}
+                    />
+                    <div
+                      className="h-4 w-40 rounded animate-pulse"
+                      style={{ backgroundColor: "#e5d9d0" }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Navigation Skeleton */}
+              <div style={{ padding: "1.5rem" }}>
+                <div className="space-y-2">
+                  {[1, 2, 3, 4, 5].map((item) => (
+                    <div
+                      key={item}
+                      className="h-12 rounded-lg animate-pulse"
+                      style={{ backgroundColor: "#f5f1ed" }}
+                    />
+                  ))}
+                  <div
+                    className="h-12 rounded-lg mt-4 animate-pulse"
+                    style={{ backgroundColor: "#f5f1ed" }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content Skeleton */}
+          <div className="flex-1">
+            <div
+              className="bg-white rounded-2xl p-8"
+              style={{ border: "1px solid #832729" }}
+            >
+              {/* Title Skeleton */}
+              <div
+                className="h-8 w-64 rounded mb-6 animate-pulse"
+                style={{ backgroundColor: "#f5f1ed" }}
+              />
+
+              {/* Description Skeleton */}
+              <div
+                className="h-4 w-full rounded mb-2 animate-pulse"
+                style={{ backgroundColor: "#f5f1ed" }}
+              />
+              <div
+                className="h-4 w-3/4 rounded mb-8 animate-pulse"
+                style={{ backgroundColor: "#f5f1ed" }}
+              />
+
+              {/* Dashboard Cards Skeleton */}
+              <div className="grid md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((item) => (
+                  <div
+                    key={item}
+                    className="p-6 rounded-xl"
+                    style={{
+                      backgroundColor: "#f5f1ed",
+                      border: "1px solid #e5d9d0",
+                    }}
+                  >
+                    <div
+                      className="h-8 w-8 rounded mb-4 animate-pulse"
+                      style={{ backgroundColor: "#e5d9d0" }}
+                    />
+                    <div
+                      className="h-8 w-20 rounded mb-2 animate-pulse"
+                      style={{ backgroundColor: "#e5d9d0" }}
+                    />
+                    <div
+                      className="h-4 w-24 rounded animate-pulse"
+                      style={{ backgroundColor: "#e5d9d0" }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
